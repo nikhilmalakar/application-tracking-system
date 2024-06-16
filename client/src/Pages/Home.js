@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { Hero } from '../components/Home/Hero'
+import { FeaturedJobs } from '../components/Home/FeaturedJobs'
 
 export const Home = () => {
+
   return (
     <div>
-        <h1 className='text-secondary'>Welcome to my website!</h1>
+      <Hero />
+      <FeaturedJobs />
     </div>
   )
 }

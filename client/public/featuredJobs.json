@@ -1,0 +1,44 @@
+[
+    {
+      "id": 1,
+      "companyName": "Linear company",
+      "jobTitle": "Software Engineer",
+      "companyLogo": "/images/Linear.png",
+      "minPrice": "20",
+      "maxPrice": "30",
+      "salaryType": "Yearly",
+      "jobLocation": "Brussels",
+      "postingDate": "2023-11-03",
+      "experienceLevel": "Any experience",
+      "employmentType": "Full-time",
+      "description": "Mollit in laborum tempor Lorem incididunt irure. Aute eu ex ad sunt. Pariatur sint culpa do incididunt eiusmod eiusmod culpa. laborum tempor Lorem incididunt."
+    },
+    {
+      "id": 2,
+      "companyName": "Notion",
+      "jobTitle": "Web Developer",
+      "companyLogo": "/images/Notion.png",
+      "minPrice": "40",
+      "maxPrice": "50",
+      "salaryType": "Yearly",
+      "jobLocation": "San Francisco",
+      "postingDate": "2023-11-02",
+      "experienceLevel": "Internship",
+      "employmentType": "Temporary",
+      "description": "Mollit in laborum tempor Lorem incididunt irure. Aute eu ex ad sunt. Pariatur sint culpa do incididunt eiusmod eiusmod culpa. laborum tempor Lorem incididunt."
+    },
+    {
+      "id": 3,
+      "companyName": "Spline studio",
+      "jobTitle": "Data Scientist",
+      "companyLogo": "/images/Spline.png",
+      "minPrice": "40",
+      "maxPrice": "50",
+      "salaryType": "Yearly",
+      "jobLocation": "Seattle",
+      "postingDate": "2023-10-28",
+      "experienceLevel": "Any experience",
+      "employmentType": "Full-time", 
+      "description": "Mollit in laborum tempor Lorem incididunt irure. Aute eu ex ad sunt. Pariatur sint culpa do incididunt eiusmod eiusmod culpa. laborum tempor Lorem incididunt."
+    }
+]

@@ -1,11 +1,11 @@
 import Job from '../../models/Job.js'
+import uniqid from 'uniqid';
 
 const addJob = async (req, res) => {
-    const { id } = req.params;
     const { jobTitle, location, salary, description, employmentType, q1, q2, q3, q4, q5, qa1, qa2, qa3, qa4, qa5 } = req.body;
 
     const job = new Job({
-        // jobID : id,
+        jobID : uniqid(),
         jobTitle, 
         location, 
         salary, 

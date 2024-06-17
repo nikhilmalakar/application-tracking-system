@@ -4,15 +4,15 @@ import Job from '../models/Job.js';
 const router = express.Router();
 
 import {getJobs} from '../controllers/Job/getJobs.js';
-// import {getFlashCard} from '../controllers/flashcard/getFlashCard.js';
+import {getJob } from '../controllers/Job/getJob.js';
 import {addJob} from '../controllers/Job/addJob.js';
-// import {deleteFlashCard} from '../controllers/flashcard/deleteFlashCard.js';
-// import {updateFlashCard} from '../controllers/flashcard/updateFlashCard.js';
+import { deleteJob } from '../controllers/Job/deleteJob.js';
+import { updateJob } from '../controllers/Job/updateJob.js';
 
-router.get('/all-jobs', getJobs); //ok
-// router.get("/getFlashCard/:id/:lid", getFlashCard); //ok
-router.post('/post-job', addJob); //ok
-// router.delete('/deleteFlashCard/:id', deleteFlashCard); //ok
-// router.put('/updateFlashCard/:id', updateFlashCard); //ok
+router.get('/all-jobs', getJobs); 
+router.post('/post-job', addJob); 
+router.get('/current-job/:id', getJob); 
+router.delete('/delete-job/:id', deleteJob); 
+router.put('/update-job/:id', updateJob);
 
 export default router;

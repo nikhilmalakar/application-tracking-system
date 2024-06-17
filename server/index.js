@@ -16,21 +16,12 @@ app.use(express.json());
 app.use(cors());
 
 // Import routes
-// import studentRoutes from "./routes/studentRoutes.js";
-// import tutorRoutes from "./routes/tutorRoutes.js";
-// import testRoutes from "./routes/testRoutes.js";
-// import languageRoutes from "./routes/languageRoutes.js";
 import jobRoutes from "./routes/jobRoutes.js";
-// import subscription from "./routes/subscriptionRoutes.js";
-
+import userRoutes from "./routes/userRoutes.js"
 
 // Use routes
-// app.use("/student", studentRoutes);
-// app.use("/tutor", tutorRoutes);
-// app.use("/test", testRoutes);
-// app.use("/language", languageRoutes);
-app.use("/job", jobRoutes);
-// app.use("/subscription", subscription);
+app.use("/jobs", jobRoutes);
+app.use("/users", userRoutes);
 
 
 // Routes

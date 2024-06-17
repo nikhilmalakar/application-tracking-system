@@ -11,7 +11,19 @@ export const PostJob = () => {
         formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => console.log(data)
+    const onSubmit = (data) =>{ 
+        console.log(data)
+        // send data to backend API
+        // fetch("http://localhost:8080/job/post-job", {
+        //     method: "POST",
+        //     headers: {'content-type' : 'application/json'},
+        //     body: JSON.stringify(data)
+        // })
+        // .then((res) => res.json())
+        // .then((result) => {
+        //     console.log(result);
+        // })
+    }
 
     // DYNAMIC CANDIDATE FORM QUESTION
     const [questions, setQuestions] = useState([{ question: '', answer: '' }]);
@@ -73,15 +85,15 @@ export const PostJob = () => {
                                     <div key={index}>
                                             <label className='block m-1 text-md'>Question {`${index+1}`}</label>
                                             <div className='mb-2 text-lg grid grid-cols-1 md:grid-cols-2'>
-                                                <input type='text' required {...register(`question${index + 1}`)} placeholder={`Question ${index + 1}`} className=' create-job-input placeholder:text-xs md:placeholder:text-sm' ></input>
+                                                <input type='text' required {...register(`q${index + 1}`)} placeholder={`Question ${index + 1}`} className=' create-job-input placeholder:text-xs md:placeholder:text-sm' ></input>
 
                                                 <div className='grid grid-cols-3 items-center justify-items-center my-2 md:my-0 ' >
                                                     <div className='flex'>
-                                                        <input {...register(`qans${index + 1}`, { required: true })} type="radio" value="Yes" className='mx-2' />
+                                                        <input {...register(`qa${index + 1}`, { required: true })} type="radio" value="Yes" className='mx-2' />
                                                         <p>Yes</p>
                                                     </div>
                                                     <div className='flex'>
-                                                        <input {...register(`qans${index + 1}`, { required: true })} type="radio" value="No" className='mx-2' />
+                                                        <input {...register(`qa${index + 1}`, { required: true })} type="radio" value="No" className='mx-2' />
                                                         <p>No</p>
                                                     </div>
                                                     <div onClick={() => handleDeleteQuestion(index)}>

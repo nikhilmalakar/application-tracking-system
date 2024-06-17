@@ -155,3 +155,5 @@ li {
 .create-job-input{
   @apply block w-full flex-1 bg-white py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6
 }
+
+/* Table CSS */

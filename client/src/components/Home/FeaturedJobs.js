@@ -6,9 +6,9 @@ export const FeaturedJobs = () => {
     const [jobs, setJobs] = useState([]);
 
     useEffect(() => {
-        fetch("featuredJobs.json").then(res => res.json()).then(
-            data => setJobs(data)
-        )
+        // fetch("http://localhost:8080/job/all-jobs").then(res => res.json()).then(
+        //     data => setJobs(data)
+        // )
     }
         , []);
 
@@ -33,8 +33,8 @@ function Card({ job }) {
                 </div>
                 <div>
                     <div className='flex items-center'>
-                        <box-icon size='18px' name='building'></box-icon>
-                        <span className='pl-1'>{job.companyName} </span>
+                        <box-icon size='18px' name='time'></box-icon>
+                        <span className='pl-1'>{job.employmentType} </span>
                     </div>
                     <h1 className='font-bold text-md lg:text-lg'>{job.jobTitle}</h1>
                 </div>
@@ -46,7 +46,7 @@ function Card({ job }) {
             <div className='flex justify-between items-center'>
                 <div className='flex justify-center items-center'>
                     <box-icon size='19px' name='pin'></box-icon>
-                    <span className='pl-2'>{job.jobLocation} </span>
+                    <span className='pl-2'>{job.location} </span>
                 </div>
                     
                 <button className='hidden lg:block bg-primary text-white text-sm py-1 px-4 rounded-md'>Apply Now</button>

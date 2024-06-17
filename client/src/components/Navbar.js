@@ -5,6 +5,7 @@ import 'boxicons';
 const navItems = [
     { label: 'Home', path: '/' },
     { label: 'Jobs', path: '/jobs' },
+    { label: 'All Jobs', path: '/all-jobs' },
     { label: 'Post Job', path: '/post-job' },
     { label: 'About', path: '/about' },
 ];

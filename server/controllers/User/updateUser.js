@@ -2,19 +2,28 @@ import User from '../../models/User.js'
 
 const updateUser = async (req, res) => {
     try {
-        const { userName, userEmail, userPassword, gender, address, userType } = req.body;
+        const {id} = req.params;
 
-        const filteredData = {
-            ...(userName && { userName }),
-            ...(userEmail && { userEmail }),
-            ...(userPassword && { userPassword }),
-            ...(gender && { gender }),
-            ...(address && { address }),
-            ...(userType && { userType })
-        };
+        const user = await User.findById(id);
         
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, filteredData, { new: true });
-        res.status(200).json(updatedUser);
+        if(!user) {
+            return res.status(404).json({ 
+                success:false,
+                message: "User not found" 
+            });
+        }
+        
+        // user.userName = userName;
+        // user.userEmail = userEmail;
+        // user.userPassword = userPassword;
+        // user.gender = gender;
+        // user.address = address;
+        user.isAssigned = req.body.isAssigned;
+        // user.userType = userType;
+        
+        await user.save();
+        res.status(200).json({success: true, data: user});
+        
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

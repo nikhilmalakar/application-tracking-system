@@ -1,16 +1,17 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export const FeaturedJobs = () => {
 
     const [jobs, setJobs] = useState([]);
 
     useEffect(() => {
-        // fetch("http://localhost:8080/job/all-jobs").then(res => res.json()).then(
-        //     data => setJobs(data)
-        // )
-    }
-        , []);
+        console.log("hello");
+        fetch("http://localhost:8080/jobs/all-jobs").then(res => res.json()).then(
+            data => setJobs(data)
+        );
+    }, []);
 
     return (
         <div className=''>
@@ -48,8 +49,9 @@ function Card({ job }) {
                     <box-icon size='19px' name='pin'></box-icon>
                     <span className='pl-2'>{job.location} </span>
                 </div>
-                    
-                <button className='hidden lg:block bg-primary text-white text-sm py-1 px-4 rounded-md'>Apply Now</button>
+                <Link to={`/current-job/${job._id}`}>
+                    <button className='hidden lg:block bg-primary text-white text-sm py-1 px-4 rounded-md'>Apply Now</button>
+                </Link>
                             
             </div>
         </div>

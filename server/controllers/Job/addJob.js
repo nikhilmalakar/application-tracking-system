@@ -2,17 +2,20 @@ import Job from '../../models/Job.js'
 import uniqid from 'uniqid';
 
 const addJob = async (req, res) => {
-    const { jobTitle, location, salary, description, employmentType, q1, q2, q3, q4, q5, qa1, qa2, qa3, qa4, qa5 } = req.body;
+    const { jobTitle, employmentType, location, salary, description, applicationForm, applicants } = req.body;
+
+    console.log("Data on backend");
+    console.log(req.body);
 
     const job = new Job({
-        jobID : uniqid(),
-        jobTitle, 
-        location, 
-        salary, 
-        description,
+        jobID: uniqid(),
+        jobTitle,
         employmentType,
-        q1, q2, q3, q4, q5,
-        qa1, qa2, qa3, qa4, qa5
+        location,
+        salary,
+        description,
+        applicationForm,
+        applicants
     });
 
     try {   

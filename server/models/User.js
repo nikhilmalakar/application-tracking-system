@@ -26,6 +26,21 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    isAssigned: {
+        type: Boolean
+    },
+    applications: [{
+        jobId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Job',
+            required: true
+        },
+        status: {
+            type: String,
+            enum: ['active', 'inactive', 'shortlist', 'rejected'],
+            default: 'active'
+        }
+    }]
 });
 
 const User = mongoose.model('User', UserSchema);

@@ -18,11 +18,14 @@ app.use(cors());
 // Import routes
 import jobRoutes from "./routes/jobRoutes.js";
 import userRoutes from "./routes/userRoutes.js"
+import applicationRoutes from "./routes/applicationRoutes.js"
+import recruiterRoutes from "./routes/recruiterRoutes.js"
 
 // Use routes
 app.use("/jobs", jobRoutes);
 app.use("/users", userRoutes);
-
+app.use("/application", applicationRoutes);
+app.use("/recruiter", recruiterRoutes);
 
 // Routes
 app.get("/", (req, res) => {

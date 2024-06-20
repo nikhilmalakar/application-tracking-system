@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { Link } from 'react-router-dom'
 
@@ -9,20 +9,40 @@ export const Register = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm()
+    } = useForm({
+        defaultValues: {
+            userName: "",
+            userEmail: "",
+            userPassword: "",
+            gender: "",
+            address: "",
+            userType: ""
+        }
+    })
+
+    const [redirect, setRedirect] = useState(false);
+
+    useEffect(() => {
+        if (redirect) {
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 2000);
+        }
+    }, [redirect]);
 
     const onSubmit = (data) => {
         console.log(data)
         // send data to backend API
-        // fetch("http://localhost:8080/job/post-job", {
-        //     method: "POST",
-        //     headers: {'content-type' : 'application/json'},
-        //     body: JSON.stringify(data)
-        // })
-        // .then((res) => res.json())
-        // .then((result) => {
-        //     console.log(result);
-        // })
+        fetch("http://localhost:8080/users/add-user", {
+            method: "POST",
+            headers: {'content-type' : 'application/json'},
+            body: JSON.stringify(data)
+        })
+        .then((res) => res.json())
+        .then((result) => {
+            console.log(result);
+            setRedirect(true)
+        })
     }
 
     return (
@@ -71,7 +91,7 @@ export const Register = () => {
                                     <option value="1">Recruiter</option>
                                     <option value="2">Coordinator</option>
                                     <option value="3">Employer</option>
-                                </select>    
+                                </select>
                             </div>
                         </div>
                     </div>

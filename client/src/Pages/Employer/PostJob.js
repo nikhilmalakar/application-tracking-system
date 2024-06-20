@@ -9,20 +9,33 @@ export const PostJob = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm()
+    } = useForm({
+        defaultValues:{
+            jobTitle: "",
+            employmentType: "",
+            location: "",
+            salary: "",
+            description: "",
+            applicationForm: {
+                question: [""],
+                answer: [""]
+            }
+            
+        }
+    })
 
     const onSubmit = (data) =>{ 
         console.log(data)
         // send data to backend API
-        // fetch("http://localhost:8080/job/post-job", {
-        //     method: "POST",
-        //     headers: {'content-type' : 'application/json'},
-        //     body: JSON.stringify(data)
-        // })
-        // .then((res) => res.json())
-        // .then((result) => {
-        //     console.log(result);
-        // })
+        fetch("http://localhost:8080/jobs/post-job", {
+            method: "POST",
+            headers: {'content-type' : 'application/json'},
+            body: JSON.stringify(data)
+        })
+        .then((res) => res.json())
+        .then((result) => {
+            console.log(result);
+        })
     }
 
     // DYNAMIC CANDIDATE FORM QUESTION
@@ -36,7 +49,7 @@ export const PostJob = () => {
         const newQuestions = questions.filter((_, qIndex) => qIndex !== index);
         setQuestions(newQuestions);
         setQuestionSize(questionSize-1);
-      };
+    };
 
 
     return (
@@ -85,15 +98,15 @@ export const PostJob = () => {
                                     <div key={index}>
                                             <label className='block m-1 text-md'>Question {`${index+1}`}</label>
                                             <div className='mb-2 text-lg grid grid-cols-1 md:grid-cols-2'>
-                                                <input type='text' required {...register(`q${index + 1}`)} placeholder={`Question ${index + 1}`} className=' create-job-input placeholder:text-xs md:placeholder:text-sm' ></input>
+                                                <input type='text' required {...register(`applicationForm.question.${index}`)} placeholder={`Question ${index + 1}`} className=' create-job-input placeholder:text-xs md:placeholder:text-sm' ></input>
 
                                                 <div className='grid grid-cols-3 items-center justify-items-center my-2 md:my-0 ' >
                                                     <div className='flex'>
-                                                        <input {...register(`qa${index + 1}`, { required: true })} type="radio" value="Yes" className='mx-2' />
+                                                        <input {...register(`applicationForm.answer.${index}`, { required: true })} type="radio" value="Yes" className='mx-2' />
                                                         <p>Yes</p>
                                                     </div>
                                                     <div className='flex'>
-                                                        <input {...register(`qa${index + 1}`, { required: true })} type="radio" value="No" className='mx-2' />
+                                                        <input {...register(`applicationForm.answer.${index}`, { required: true })} type="radio" value="No" className='mx-2' />
                                                         <p>No</p>
                                                     </div>
                                                     <div onClick={() => handleDeleteQuestion(index)}>

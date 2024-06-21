@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 
 export const ShortlistedCandidates = () => {
 
@@ -6,38 +7,53 @@ export const ShortlistedCandidates = () => {
     
     const [jobs, setJobs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [shortlistApplication, setShortlistApplication] = useState()
+    const [shortlistCandidate, setShortlistCandidate] = useState()
 
-    useEffect( ()=>{
+    useEffect(() => {
 
-        setJobs(
-            [
-                {
-                    "id": 1,
-                    "jobTitle": "Software Engineer",
-                    "salary": "50",
-                    "location": "Brussels",
-                    "date": "2023-11-03"
-                },
-                {
-                    "id": 2,
-                    "jobTitle": "Software Developer",
-                    "salary": "10",
-                    "location": "Brussels",
-                    "date": "2023-11-03"
-                  }
-            ]
-        )
-        console.log(jobs);
-    }, [] )
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     fetch("jobs.json").then(res => res.json()).then(
-    //         data => setJobs(data)
-    //     )
-    //     setIsLoading(false);
-    //     console.log(jobs);
-    // }
-    //     , []);
+        try {
+            fetch(`http://localhost:8080/application/all-application/`)
+            .then((res) => res.json())
+            .then((data) => {
+                const filterData = data.filter(item => item.applicationStatus === "shortlist"); 
+                setShortlistApplication(filterData);
+                console.log(filterData);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
+    useEffect(() => {
+        function fetchData(){
+            try {
+                fetch(`http://localhost:8080/users/all-users/`)
+                .then((res) => res.json())
+                .then((data) => {
+                    const filterData = data.filter(user => {
+                        return shortlistApplication.some(application => application.candidateID === user._id)
+                    }); 
+                    setShortlistCandidate(filterData);
+                    console.log(filterData);
+                })
+                fetch(`http://localhost:8080/jobs/all-jobs/`)
+                .then((res) => res.json())
+                .then((data) => {
+                    const filterData = data.filter(job => {
+                        return shortlistApplication.some(application => application.jobID === job._id)
+                    }); 
+                    setJobs(filterData);
+                    console.log(filterData);
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        if(shortlistApplication){
+            fetchData();
+        }
+    }, [shortlistApplication]);
 
     return (
         <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
@@ -63,15 +79,14 @@ export const ShortlistedCandidates = () => {
                                         <thead>
                                             <tr>
                                                 <th className={tableHeaderCss}>Candidate</th>
-                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Job Role</th>
-                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Salary</th>
-                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Location</th>
+                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Email</th>
+                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Verdict</th>
                                                 <th className={tableHeaderCss}></th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            {jobs.map((job, key) => <RenderTableRows key={key} job={job} />)}
+                                            {shortlistCandidate && jobs && shortlistCandidate.map((candidate, key) => <RenderTableRows job={jobs} key={key} candidate={candidate} />)}
                                         </tbody>
 
                                     </table>
@@ -93,28 +108,26 @@ function HandlerUpdateJob(id){
     console.log("delete job");
 }
 
-function RenderTableRows({job}){
+function RenderTableRows({candidate, job}){
     console.log("called");
+    console.log(job);
     const tableDataCss = "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
     return (
 
         <tr>
             <th className= {`${tableDataCss} text-left text-blueGray-700 px-3 md:px-6`}>
-                {job.jobTitle}
+                {candidate.userName}
             </th>
             <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.location}
+                {candidate.userEmail}
             </td>
             <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.salary}
-            </td>
-            <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.date}
+                Shortlisted
             </td>
             <td className={`flex justify-between ${tableDataCss}`}>
-                <button>
-                    <box-icon name='trash' onClick={() => HandlerDeleteJob()} />
-                </button>
+                <Link to={`/shortlist/details/${candidate._id}/${job[0]._id}`}>
+                    <button className='block bg-primary text-white mx-auto text-md py-2  px-2 md:px-6 rounded-md'>Details</button>
+                </Link>
             </td>
         </tr>
     )

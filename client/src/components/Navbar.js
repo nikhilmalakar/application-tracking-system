@@ -19,7 +19,7 @@ export const Navbar = () => {
 
             <nav className='flex justify-between items-center py-6'>
                 {/* BRAND */}
-                <NavLink to='/about' className='flex items-center gap-2 text-2xl text-black'>
+                <NavLink to='/' className='flex items-center gap-2 text-2xl text-black'>
                     <box-icon name="rocket"></box-icon>
                     <span>Linkedin Jobs</span>
                 </NavLink>

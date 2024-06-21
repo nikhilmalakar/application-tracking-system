@@ -1,4 +1,5 @@
 import React from 'react'
+import { OurCompanies } from './OurCompanies'
 
 export const Hero = () => {
   return (
@@ -19,6 +20,8 @@ export const Hero = () => {
 
             </div>
         </div>
+
+        <OurCompanies />
 
     </div>
   )

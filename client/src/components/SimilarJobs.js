@@ -1,22 +1,25 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import logoURL from '../../assets/img/logo.jpeg'
+import logoURL from '../assets/img/logo.jpeg'
 
-export const FeaturedJobs = () => {
+export const SimilarJobs = () => {
 
     const [jobs, setJobs] = useState([]);
 
     useEffect(() => {
         console.log("hello");
         fetch("http://localhost:8080/jobs/all-jobs").then(res => res.json()).then(
-            data => setJobs(data)
+            data => {
+                const newData = data.slice(0, 6);
+                setJobs(newData)
+            }
         );
     }, []);
 
     return (
         <div className=''>
-            <h1 className='text-center text-xl md:text-2xl font-bold text-primary mt-8 md:mt-6'>Our Featured Jobs</h1>
+            <h1 className='text-center text-xl md:text-2xl font-bold text-primary mt-8 md:mt-6'>Similar Jobs</h1>
             <div className='w-full grid sm:grid-cols-2 md:grid-cols-3  gap-4'>
                 {jobs.map((job, key) => <Card key={key} job={job} />)}
             </div>
@@ -31,7 +34,7 @@ function Card({ job }) {
             <div className='flex items-center gap-3'>
                 <div>
                     {/* company image */}
-                    <img src={logoURL} alt={job.companyName} className='w-12 rounded-full' />
+                    <img src={logoURL} alt={job.companyName} className='rounded-full w-12' />
                 </div>
                 <div>
                     <div className='flex items-center'>

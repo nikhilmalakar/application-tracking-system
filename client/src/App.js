@@ -12,8 +12,10 @@ import { CoordinatorDashboard } from './Pages/Coordinator/CoordinatorDashboard';
 import { JobDetails } from './components/Home/JobDetails';
 import { CandidateProfile } from './Pages/Recruiter/CandidateProfile';
 import { ShortlistedCandidates } from './components/ShortlistedCandidates';
+import { ShortlistedDetails } from './components/ShortlistedDetails';
 import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
 import { AssignRecruiter } from './Pages/Coordinator/AssignRecruiter';
+import { Footer } from './components/Footer';
 
 function App() {
   return (
@@ -33,13 +35,17 @@ function App() {
             <Route path='/application-form/:id' element={<ApplicationForm />}/>
             <Route path='/candidate/:id' element={<CandidateProfile />}/>
             <Route path='/shortlist' element={<ShortlistedCandidates />}/>
+            <Route path='/shortlist/details/:candidate_id/:job_id' element={<ShortlistedDetails />}/>
             <Route path='/assign-recruiter/:id' element={<AssignRecruiter />}/>
 
             <Route path='/recruiter/review' element={<RecruiterDashboard />}/>
             {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
             <Route path='/coordinator/review' element={<CoordinatorDashboard />}/>
-          </Route>      
+              
+          </Route>
+          
       </Routes>
+      <Footer />
     </div>
   );
 }

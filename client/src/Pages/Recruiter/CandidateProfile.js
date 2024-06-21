@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useForm, SubmitHandler } from "react-hook-form"
 
@@ -9,94 +9,202 @@ export const CandidateProfile = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm()
+        setValue,
+        
+    } = useForm({
+        defaultValues: {
+            _id: "",
+            candidateID: "",
+            jobID: "",
+            applicationStatus: "",
+            applicationForm: [{
+                question: "",
+                answer: ""
+            }],
+            candidateFeedback: [{
+                question: "",
+                answer: ""
+            }]
+        }
+    })
 
     const { id } = useParams();
-    const [jobs, setJobs] = useState([]);
+    const currRecruiterID = "66733676ab92f179a717d0e9"
+    // const index = id;/
+    // const id = "667478f128091d0d096071ea"
+    const [application, setApplicaton] = useState();
+    const [candidate, setCandidate] = useState();
+    const [recruiter, setRecruiter] = useState();
+    const [job, setJob] = useState();
 
-    const handleApply = async () => {
+    useEffect(() => {
+        console.log(id);
+        try {
+            fetch(`http://localhost:8080/application/all-application/`)
+            .then((res) => res.json())
+            .then((data) => {
+                const filterData = data.filter(item => item.candidateID === id); 
+                setApplicaton(filterData[11]);
+                // console.log(filterData[11]);
+            })
 
+            fetch(`http://localhost:8080/users/user/${id}`)
+            .then((res) => res.json())
+            .then((data) => {
+                setCandidate(data)
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log(id);
+        try {
+            fetch(`http://localhost:8080/recruiter/all-recruiter/`)
+            .then((res) => res.json())
+            .then((data) => {
+                const filterData = data.filter(item => item.recruiterID === currRecruiterID); 
+                setRecruiter(filterData[2]);
+                console.log(filterData[2]);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
+    useEffect(() => {
+        function fetchJob(){
+
+            try {
+                fetch(`http://localhost:8080/jobs/all-jobs/`)
+                .then((res) => res.json())
+                .then((data) => {
+                    const filterData = data.filter(job => job._id === recruiter.jobID); 
+                    setJob(filterData[0]);
+                    console.log(filterData[0]);
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        recruiter && fetchJob();
+    }, [recruiter]);
+    
+    const onSubmit = (data) => {
+
+        const newData = {
+            ...data, 
+            _id: application._id,
+            candidateID:candidate._id,
+            jobID : job._id,
+            applicationStatus: data.applicationStatus,
+            candidateFeedback: [...recruiter.feedbackForm.map((q, index) => ({
+                answer: data.candidateFeedback[index].answer,
+                question: q
+
+            }))]
+        }
+        // console.log(newData);
+
+        fetch("http://localhost:8080/application/post-application", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(newData),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
+            });
     }
+
     return (
         <div className='max-w-scren-2xl  w-full md:w-4/6 lg:w-6/8 container mt-2 mx-auto xl:px-24 px-4 '>
             <div className=' bg-[#efefef] mx-auto py-12 md:px-14 px-8 rounded-lg'>
 
-                <form onSubmit={handleSubmit()} >
+                <form onSubmit={handleSubmit(onSubmit)} >
                     <div className='flex flex-col lg:flex-row  gap-8'>
 
                         {/* JOB POSTING DETAILS */}
-                        <div className='lg:w-1/2 w-full'>
 
-                            {/* BASIC DETAILS */}
-                            <div className=''>
-                                <h1 className='text-xl md:text-2xl font-bold'>Abhishek Sharma</h1>
-                                {/* <p className='text-secondary'>abhishek@gmail.com</p> */}
-                                {/* <p className='text-sm text-gray-700'>Posted - 19/06/2024</p> */}
-                            </div>
+                            <div className='lg:w-1/2 w-full'>
 
-                            {/* JOB DESCRIPTION */}
-                            <div className='px-1'>
-                                <h2 className='mt-4 mb-2 font-bold'>Candidate Details</h2>
-                                <p className='text-sm md:text-base text-justify '>Email: abhishek@gmail.com</p>
-                                <p className='text-sm md:text-base text-justify '>Gender: Male</p>
-                                <p className='text-sm md:text-base text-justify '>Address: A70, Tricone City, Delhi</p>
-                            </div>
-                            <div className='px-1'>
-                                <h2 className='mt-4 mb-2 font-bold'>Application Form (R1)</h2>
-                                <p className='text-sm md:text-base text-justify '>Q1: Are you proficient in Java?</p>
-                                <p className='text-sm md:text-base text-justify '>Response: <span className='font-semibold'>Yes</span></p>
-                                
-                                <p className='text-sm md:text-base text-justify '>Q2: Are you having 2+ YOE?</p>
-                                <p className='text-sm md:text-base text-justify '>Response: <span className='font-semibold'>Yes</span></p>
-                                
-                                <p className='text-sm md:text-base text-justify '>Q3: Are you willing to relocate?</p>
-                                <p className='text-sm md:text-base text-justify '>Response: <span className='font-semibold'>Yes</span></p>
-                                
-                                
-                            </div>
-                        </div>
+                                <div>
 
+                                    {
+                                        candidate && job &&
+                                        <div>
+                                        <div>
+                                            <div>
+                                                <h1 className='text-xl md:text-2xl font-bold'>{candidate.userName}</h1>
+                                            </div>
+                                            <div className='px-1'>
+                                                <h2 className='mt-4 mb-2 font-bold'>Candidate Details</h2>
+                                                <p className='text-sm md:text-base text-justify '>Email: {candidate.userEmail}</p>
+                                                <p className='text-sm md:text-base text-justify '>Gender: {candidate.gender}</p>
+                                                <p className='text-sm md:text-base text-justify '>Address: {candidate.location}</p>
+                                            </div>
+                                        </div>
+                                        
+                                         
+                                            <div>
+                                                <div className='px-1'>
+                                                    <h2 className='mt-2 mb-2 font-bold'>Job Details</h2>
+                                                    <p className='text-sm md:text-base text-justify '>Job Role: {job.employmentType}</p>
+                                                    <p className='text-sm md:text-base text-justify '>Location: {job.location}</p>
+                                                    <p className='text-sm md:text-base text-justify '>Salary: {job.salary}</p>
+                                                    <p className='text-sm md:text-base text-justify '>Description: {job.description}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                            {
+                                application && 
+
+                                <div className='px-1'>
+                                    <h2 className='mt-2 mb-2 font-bold'>Application Form (R1)</h2>
+                                    {application && 
+                                        <div className='px-1'>
+                                            {application.applicationForm && application.applicationForm.map((question, index) => (
+                                                <div key={index}>
+                                                    <p className='text-sm md:text-base text-justify'>Q{index + 1}: {question.question}</p>
+                                                    <p className='text-sm md:text-base text-justify'>Response: <span className='font-semibold'>{question.answer}</span></p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    }
+                                    
+                                </div>
+                            }
+                            </div>
+                        
+                            
                         {/* CANDIDATE FORM */}
                         <div className='lg:w-1/2 w-full'>
-                            <div><h1 className='text-xl font-bold text-center'>Candidate Form</h1></div>
+                            <div><h1 className='text-xl font-bold text-center'>Feedback Form</h1></div>
 
-
+        
 
                             {/* DYNAMIC BLOCK */}
                             <div>
-                                {/* {questions.map((question, index) => (
+                                {
+                                    recruiter && 
+                                    recruiter.feedbackForm.map((question, index) => {
+                                        return <RenderQuestion key={index} index={index
 
-                                    <div key={index}>
-                                        <label className='block m-1 text-md'>Question {`${index + 1}`}</label>
-                                        <div className='mb-2 text-lg grid grid-cols-1 md:grid-cols-2'>
-                                            <input type='text' required {...register(`q${index + 1}`)} placeholder={`Question ${index + 1}`} className=' create-job-input placeholder:text-xs md:placeholder:text-sm' ></input>
-
-                                            <div className='grid grid-cols-3 items-center justify-items-center my-2 md:my-0 ' >
-                                                <div className='flex'>
-                                                    <input {...register(`qa${index + 1}`, { required: true })} type="radio" value="Yes" className='mx-2' />
-                                                    <p>Yes</p>
-                                                </div>
-                                                <div className='flex'>
-                                                    <input {...register(`qa${index + 1}`, { required: true })} type="radio" value="No" className='mx-2' />
-                                                    <p>No</p>
-                                                </div>
-                                                <div>
-                                                    <box-icon size='sm' name='trash' />
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                ))} */}
+                                        } register={register} setValue={setValue} question={question}/>
+                                    })
+                                }
                             </div>
-                            <button  className={` block border border-black bg-transparent text-black text-xs md:text-md py-3 px-12 md:px-16 rounded-md mt-4 md:mt-8 mx-auto`}>Add More Questions</button>
                         </div>
                     </div>
 
                     {/* Submit button */}
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4 my-8'>
-                        <button className='block bg-red-500 text-white text-md py-4 px-16 rounded-md'>Reject</button>
-                        <button className='block bg-green-500 text-white text-md py-4 px-16 rounded-md'>Shortlist</button>
+                        <button type="submit" className='block bg-red-500 text-white text-md py-4 px-16 rounded-md' onClick={() => setValue("applicationStatus", "reject")}>Reject</button>
+                        <button type="submit" className='block bg-green-500 text-white text-md py-4 px-16 rounded-md' onClick={() => setValue("applicationStatus", "shortlist")}>Shortlist</button>
                     </div>
                 </form>
 
@@ -107,4 +215,23 @@ export const CandidateProfile = () => {
             </div>
         </div>
     )
+}
+
+function RenderQuestion({ index, question, setValue, register }) {
+    return (
+        <div className='grid grid-cols-1 md:grid-cols-2 items-center pt-2 md:my-0'>
+            <label className='block mt-2 m-1 text-sm'>{index + 1}. {question}</label>
+        {/* <input {...register(`candidateFeedback.${index}.question`)} type="hidden" value={question} /> */}
+            <div className='grid grid-cols-2 items-center justify-items-center'>
+                <div className='flex'>
+                    <input {...register(`candidateFeedback.${index}.answer`, { required: true })} type="radio" value="Yes" className='mx-2' />
+                    <p>Yes</p>
+                </div>
+                <div className='flex'>
+                    <input {...register(`candidateFeedback.${index}.answer`, { required: true })} type="radio" value="No" className='mx-2' />
+                    <p>No</p>
+                </div>
+            </div>
+        </div>
+    );
 }

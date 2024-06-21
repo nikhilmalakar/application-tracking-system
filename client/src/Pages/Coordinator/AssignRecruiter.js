@@ -38,18 +38,14 @@ export const AssignRecruiter = () => {
         defaultValues: {
             jobID: "",
             recruiterID: "",
-            feedbackForm:{
-                question: [],
-                answer: []
-            }
-
+            feedbackForm:[""]
         }
     })
 
     const onSubmit = (data) => {
         console.log("Form submitted");
         const newData = {...data, jobID:id};
-
+        console.log(newData);
         fetch("http://localhost:8080/recruiter/post-recruiter", {
             method: "POST",
             headers: { 'content-type': 'application/json' },
@@ -173,7 +169,7 @@ export const AssignRecruiter = () => {
                                         <label className='block m-1 text-md'>Question {`${index + 1}`}</label>
                                         <div className='mb-2 text-lg grid items-center'>
                                             <div className='flex items-center justify-center'>
-                                                <input type='text' {...register(`feedbackForm.question.${index}`)} placeholder={placeholderQuestions[`${index}`]} className=' create-job-input placeholder:text-xs md:placeholder:text-sm' ></input>
+                                                <input type='text' {...register(`feedbackForm.${index}`)} placeholder={placeholderQuestions[`${index}`]} className=' create-job-input placeholder:text-xs md:placeholder:text-sm' ></input>
 
                                                 <div className='mx-4' onClick={() => handleDeleteQuestion(index)}>
                                                     <box-icon size='sm' name='trash' />

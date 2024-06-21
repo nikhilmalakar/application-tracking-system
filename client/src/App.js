@@ -31,11 +31,12 @@ function App() {
             {/* <Route path='/job-detail' element={<JobDetails />}/> */}
             <Route path='/current-job/:id' element={<JobDetails />}/>
             <Route path='/application-form/:id' element={<ApplicationForm />}/>
-            <Route path='/candidate' element={<CandidateProfile />}/>
+            <Route path='/candidate/:id' element={<CandidateProfile />}/>
             <Route path='/shortlist' element={<ShortlistedCandidates />}/>
             <Route path='/assign-recruiter/:id' element={<AssignRecruiter />}/>
 
             <Route path='/recruiter/review' element={<RecruiterDashboard />}/>
+            {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
             <Route path='/coordinator/review' element={<CoordinatorDashboard />}/>
           </Route>      
       </Routes>

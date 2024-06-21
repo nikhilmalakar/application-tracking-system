@@ -2,22 +2,34 @@ import Application from '../../models/Application.js'
 import uniqid from 'uniqid';
 
 const addApplication = async (req, res) => {
-    const { jobID, candidateID, applicationForm } = req.body;
+    const { _id, jobID, candidateID, applicationStatus, applicationForm, candidateFeedback } = req.body;
 
-    console.log("Data on backend");
-    console.log(req.body);
+    try {
+        const existingApplication = await Application.findById(_id);
+        if (!existingApplication) {
+            return res.status(404).json({ message: "Application not found" });
+        }
+        
+        if (jobID) {
+            existingApplication.jobID = jobID;
+        }
+        if (candidateID) {
+            existingApplication.candidateID = candidateID;
+        }
+        if (applicationStatus) {
+            existingApplication.applicationStatus = applicationStatus;
+        }
+        if (applicationForm) {
+            existingApplication.applicationForm = applicationForm;
+        }
+        if (candidateFeedback) {
+            existingApplication.candidateFeedback = candidateFeedback;
+        }
 
-    const application = new Application({
-        jobID,
-        candidateID,
-        applicationForm
-    });
-
-    try {   
-        await application.save();
-        res.status(201).json(application);
+        await existingApplication.save();
+        res.status(200).json(existingApplication);
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 

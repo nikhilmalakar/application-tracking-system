@@ -71,11 +71,11 @@ export const Register = () => {
                             <div className='grid grid-cols-3 items-center pt-2 md:my-0 ' >
                                 <label className='block mt-2 m-1 text-sm'>Gender</label>
                                 <div className='flex'>
-                                    <input {...register(`gender`, { required: true })} type="radio" value="Yes" className='mx-2' />
+                                    <input {...register(`gender`, { required: true })} type="radio" value="Male" className='mx-2' />
                                     <p>Male</p>
                                 </div>
                                 <div className='flex'>
-                                    <input {...register(`gender`, { required: true })} type="radio" value="No" className='mx-2' />
+                                    <input {...register(`gender`, { required: true })} type="radio" value="Female" className='mx-2' />
                                     <p>Female</p>
                                 </div>
                             </div>

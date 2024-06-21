@@ -4,17 +4,49 @@ import LogoURL from '../../assets/img/logo.jpeg'
 
 export const JobDetails = () => {
 
-    
+
     const randomNum = Math.floor(Math.random() * (200 - 20 + 1) + 20)
     const { id } = useParams();
-    const [job, setJob] = useState([]);
+    const [job, setJob] = useState();
+    const [applicants, setApplicants] = useState();
 
     useEffect(() => {
         fetch(`http://localhost:8080/jobs/current-job/${id}`).then(res => res.json()).then(
-            data => setJob(data)
+            data =>{ setJob(data); console.log(data);}
         )
     }
         , []);
+
+    useEffect(() => {
+        if (job && job.applicants && job.applicants.length > 0) {
+            const fetchApplicantsData = async () => {
+                try {
+                    const response = await fetch(`http://localhost:8080/users/all-users`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch applicants data');
+                    }
+                    const data = await response.json();
+
+                    // Filter the applicants data based on the applicant ids in jobs
+                    // const filteredApplicants = data.filter(app => jobs.applicants.applicant.includes(app._id));
+                    const filteredApplicants = data.filter(app => {
+                        // Check if any element in jobs.applicants array has _id equal to app._id
+                        return job.applicants.some(jobApplicant => jobApplicant.applicant === app._id);
+                    });
+
+                    setApplicants(filteredApplicants);
+                    console.log(filteredApplicants);
+                    // console.log(jobs.applicants);
+                } catch (error) {
+                    console.error('Error fetching applicants data:', error);
+                }
+            };
+
+            fetchApplicantsData();
+        }
+    }, [job]);
+
+
 
     const handleApply = async () => {
 
@@ -26,42 +58,45 @@ export const JobDetails = () => {
                 <div className='flex flex-col lg:flex-row  gap-8'>
 
                     {/* JOB DETAILS */}
-                    <div className='w-full'>
+                    {
+                        job &&
+                        <div className='w-full'>
 
-                        {/* BASIC DETAILS */}
-                        <div className='flex items-center flex-wrap justify-center md:justify-normal'>
-                            <img src={LogoURL} alt="Logo" className="rounded-full w-20 md:w-24 h-auto" />
-                            <div className='mx-4 my-3 text-center md:text-left md:my-0'>
-                                <h1 className='text-xl md:text-2xl font-bold'>{job.jobTitle}</h1>
-                                <p className='text-secondary'>Humgrow.com</p>
-                                <p className='text-sm text-gray-700'>Posted - 19/06/2024</p>
+                            {/* BASIC DETAILS */}
+                            <div className='flex items-center flex-wrap justify-center md:justify-normal'>
+                                <img src={LogoURL} alt="Logo" className="rounded-full w-20 md:w-24 h-auto" />
+                                <div className='mx-4 my-3 text-center md:text-left md:my-0'>
+                                    <h1 className='text-xl md:text-2xl font-bold'>{ job.jobTitle}</h1>
+                                    <p className='text-secondary'>Humgrow.com</p>
+                                    <p className='text-sm text-gray-700'>Posted - 19/06/2024</p>
+                                </div>
+                            </div>
+
+                            {/* ADDITIONALS */}
+                            <div className='my-4 gap-2 grid grid-cols-2 sm:grid-cols-4'>
+                                <div className='bg-blue-300 rounded-lg py-4 md:py-5 text-center'>
+                                    <h2 className='text-xs md:text-md font-semibold text-gray-700'>Job Type</h2><p className='text-sm md:text-lg font-bold'>{job.employmentType}</p>
+                                </div>
+                                <div className='bg-green-300 rounded-lg py-4 md:py-5 text-center'>
+                                    <h2 className='text-xs md:text-md font-semibold text-gray-700'>Salary</h2><p className='text-sm md:text-lg font-bold'>{job.salary}</p>
+                                </div>
+                                <div className='bg-blue-300 rounded-lg py-4 md:py-5 text-center'>
+                                    <h2 className='text-xs md:text-md font-semibold text-gray-700'>Location</h2><p className='text-sm md:text-lg font-bold'>{job.location}</p>
+                                </div>
+                                <div className='bg-green-300 rounded-lg py-4 md:py-5 text-center'>
+                                    <h2 className='text-xs md:text-md font-semibold text-gray-700'>Applicants</h2><p className='text-sm md:text-lg font-bold'>{randomNum}</p>
+                                </div>
+                            </div>
+
+                            {/* JOB DESCRIPTION */}
+                            <div className='px-1'>
+                                <h2 className='my-2 font-bold'>Job Description</h2>
+                                <p className='text-sm md:text-base text-justify '>
+                                    {job.description}
+                                </p>
                             </div>
                         </div>
-
-                        {/* ADDITIONALS */}
-                        <div className='my-4 gap-2 grid grid-cols-2 sm:grid-cols-4'>
-                            <div className='bg-blue-300 rounded-lg py-4 md:py-5 text-center'>
-                                <h2 className='text-xs md:text-md font-semibold text-gray-700'>Job Type</h2><p className='text-sm md:text-lg font-bold'>{job.employmentType}</p>
-                            </div>
-                            <div className='bg-green-300 rounded-lg py-4 md:py-5 text-center'>
-                                <h2 className='text-xs md:text-md font-semibold text-gray-700'>Salary</h2><p className='text-sm md:text-lg font-bold'>{job.salary}</p>
-                            </div>
-                            <div className='bg-blue-300 rounded-lg py-4 md:py-5 text-center'>
-                                <h2 className='text-xs md:text-md font-semibold text-gray-700'>Location</h2><p className='text-sm md:text-lg font-bold'>{job.location}</p>
-                            </div>
-                            <div className='bg-green-300 rounded-lg py-4 md:py-5 text-center'>
-                                <h2 className='text-xs md:text-md font-semibold text-gray-700'>Applicants</h2><p className='text-sm md:text-lg font-bold'>{randomNum}</p>
-                            </div>
-                        </div>
-
-                        {/* JOB DESCRIPTION */}
-                        <div className='px-1'>
-                            <h2 className='my-2 font-bold'>Job Description</h2>
-                            <p className='text-sm md:text-base text-justify '>
-                                {job.description}
-                            </p>
-                        </div>
-                    </div>
+                    }
                 </div>
 
                 {/* Submit button */}
@@ -69,17 +104,30 @@ export const JobDetails = () => {
                     <h2 className=' font-bold my-4'>Upload Resume to Apply<span className=' text-red-600'>*</span></h2>
                     <div className='px-2 grid grid-cols-1 md:grid-cols-2 items-center justify-items-center gap-4'>
 
-                            <div className='w-full md:w-5/6'>
-                                <label for="file-input" class="sr-only">Choose file</label>
-                                <input type="file" name="file-input" id="file-input" class="block w-full cursor-pointer border border-primary shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-primary file:text-white file:border-0 file:me-4 file:py-2 file:px-3" />
-                            
+                        <div className='w-full md:w-5/6'>
+                            <label class="sr-only">Choose file</label>
+                            <input type="file" name="file-input" id="file-input" class="block w-full cursor-pointer border border-primary shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-primary file:text-white file:border-0 file:me-4 file:py-2 file:px-3" />
+
                         </div>
 
-                        <Link to={`/application-form/${job._id}`}>
-                            <div className='flex justify-center'>
-                                <button className='block bg-primary text-white text-md py-2 px-12 md:px-16 rounded-md'>Apply Now</button>
-                            </div>
-                        </Link>
+                        {
+                            
+                            job && applicants && 
+                            job.applicants.some(jobApplicant => {
+                                applicants.some( app => {
+
+                                    return jobApplicant.applicant === app._id
+                                } )
+                            }) ?  
+                            
+                            <Link to={`/application-form/${job._id}`}>
+                                <div className='flex justify-center'>
+                                    <button className='block bg-primary text-white text-md py-2 px-12 md:px-16 rounded-md'>Apply Now</button>
+                                </div>
+                            </Link>
+                            :
+                            <p>You already applied here</p>
+                        }
                     </div>
                 </form>
 

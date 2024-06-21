@@ -11,10 +11,18 @@ const ApplicationSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     },
-    applicationForm:{ 
-        question: [{ type: String}], 
-        answer: [{ type: String}] 
+    applicationStatus:{
+        type: String,
+        required: true,
     },
+    applicationForm:[{ 
+        question: { type: String}, 
+        answer: { type: String} 
+    }],
+    candidateFeedback:[{ 
+        question: { type: String}, 
+        answer: { type: String} 
+    }],
 });
 
 const Application = mongoose.model('Application', ApplicationSchema);

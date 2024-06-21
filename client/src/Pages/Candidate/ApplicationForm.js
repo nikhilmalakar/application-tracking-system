@@ -14,12 +14,17 @@ export const ApplicationForm = () => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            candidateID: "test",
-            jobID: null,
-            applicationForm: {
-                question: [""],
-                answer: [""]
-            }
+            candidateID: "667336c6ab92f179a717d0ec",
+            jobID: job._id,
+            applicationStatus: "active",
+            applicationForm: [{
+                question: "",
+                answer: ""
+            }],
+            candidateFeedback: [{
+                question: "",
+                answer: ""
+            }]
         }
     })
 
@@ -29,7 +34,7 @@ export const ApplicationForm = () => {
         if (redirect) {
             setTimeout(() => {
                 window.location.href = "/";
-            }, 2000);
+            }, 200000);
         }
     }, [redirect]);
 
@@ -44,6 +49,38 @@ export const ApplicationForm = () => {
         })
             .then((res) => res.json())
             .then((result) => {
+                console.log(result);
+                setRedirect(true);
+            });
+
+        fetch("http://localhost:8080/jobs/update-job-by-candidate", {
+            method: "PUT",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                jobID: id,
+                candidateID: "667336c6ab92f179a717d0ec",
+                status: "active"                
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                // Working fine
+                console.log(result);
+                setRedirect(true);
+            });
+
+        fetch("http://localhost:8080/users/update-user-by-candidate", {
+            method: "PUT",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                jobID: id,
+                candidateID: "667336c6ab92f179a717d0ec",
+                status: "active"                
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                // Applications empty
                 console.log(result);
                 setRedirect(true);
             });
@@ -77,7 +114,7 @@ export const ApplicationForm = () => {
                                 <RenderQuestion key={index} question={question} />
                             ))} */}
                             {job.applicationForm && job.applicationForm.question.map((question, index) => (
-                                <RenderQuestion key={index} index={index} question={question} register={register} />
+                                <RenderQuestion {...register(`applicationForm.${index}.question`)} key={index} index={index} question={question} register={register} />
 
                             ))}
 
@@ -100,11 +137,11 @@ function RenderQuestion({ index, question, register }) {
             <label className='block mt-2 m-1 text-sm' >{index + 1}. {question}</label>
             <div className='grid grid-cols-2 items-center justify-items-center'>
                 <div className='flex'>
-                    <input {...register(`applicationForm.answer.${index}`, { required: true })} type="radio" value="Yes" className='mx-2' />
+                    <input {...register(`applicationForm.${index}.answer`, { required: true })} type="radio" value="Yes" className='mx-2' />
                     <p>Yes</p>
                 </div>
                 <div className='flex'>
-                    <input {...register(`applicationForm.answer.${index}`, { required: true })} type="radio" value="No" className='mx-2' />
+                    <input {...register(`applicationForm.${index}.answer`, { required: true })} type="radio" value="No" className='mx-2' />
                     <p>No</p>
                 </div>
             </div>

@@ -6,22 +6,17 @@ export const RecruiterDashboard = () => {
     const tableHeaderCss = "px-4 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold "
 
     // const [isLoading, setIsLoading] = useState(true);
-    const id = "66733676ab92f179a717d0e9";
+    const id = "6676b5f64e5a14c58a720ebb";
 
-    // useEffect( ()=>{
-
-    //     setJobs(
-    //         [
-    //             {
-    //                 "id": 1,
-    //                 "userName": "John Doe",
-    //                 "userEmail": "john@gmail.com",
-    //             }
-    //         ]
-    //     )
-    //     console.log(jobs);
-    // }, [] )
-
+    const [loginData, setLoginData] = useState();
+    
+    useEffect(() => {
+        let token = localStorage.getItem("user");
+        const user = JSON.parse(token);
+        setLoginData(user[0])
+        console.log(user);
+    }, [])
+    
     const [jobs, setJobs] = useState([]);
     const [recruiter, setRecruiter] = useState();
 
@@ -93,6 +88,7 @@ export const RecruiterDashboard = () => {
                 // Filter the recruiter data based on the provided id
                 const recruiterData = data.find(recruiter => recruiter.recruiterID === id);
                 if (recruiterData) {
+                    // console.log(recruiterData);
                     setRecruiter(recruiterData);
                 } else {
                     throw new Error(`Recruiter with ID ${id} not found`);
@@ -134,7 +130,7 @@ export const RecruiterDashboard = () => {
     const [applicants, setApplicants] = useState([]);
 
     useEffect(() => {
-        if (jobs && jobs.applicants && jobs.applicants.length > 0) {
+        if (jobs && jobs.applicants) {
             const fetchApplicantsData = async () => {
                 try {
                     const response = await fetch(`http://localhost:8080/users/all-users`);
@@ -151,6 +147,7 @@ export const RecruiterDashboard = () => {
                       });
                     
                       setApplicants(filteredApplicants);
+                      console.log("below applicant");
                     console.log(filteredApplicants);
                     // console.log(jobs.applicants);
                 } catch (error) {
@@ -161,6 +158,37 @@ export const RecruiterDashboard = () => {
             fetchApplicantsData();
         }
     }, [jobs]);
+
+    const apps = [
+        {
+            "_id": "6676d1519d5f4ea7521cf13f",
+            "jobID": "6676cb664e5a14c58a721384",
+            "candidateID": "667656750d96db510a5facbf",
+            "userName": "Puneet",
+            "applicationStatus": "active",
+            "applicationForm": [
+              {
+                "question": "",
+                "answer": "",
+                "_id": "6675433b6fc8b5c030039b45"
+              }
+            ],
+            "candidateFeedback": [
+              {
+                "question": "Willing to relocate?",
+                "answer": "Yes",
+                "_id": "6675433b6fc8b5c030039b46"
+              },
+              {
+                "_id": "6676d5754e5a14c58a721744",
+                "question": "Expertise in python?",
+                "answer": "Yes"
+              }
+            ],
+            "__v": 0
+          },
+          
+    ]
 
     return (
         <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
@@ -190,7 +218,7 @@ export const RecruiterDashboard = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {applicants.map((applicant, key) => (
+                                            {apps.map((applicant, key) => (
                                                 <RenderTableRows key={key} applicant={applicant} />
                                             ))}
 

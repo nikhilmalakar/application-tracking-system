@@ -22,7 +22,7 @@ export const AssignRecruiter = () => {
         try {
             fetch(`http://localhost:8080/jobs/current-job/${id}`).then((res) => res.json()).then((data) => setJob(data))
             fetch(`http://localhost:8080/users/all-users`).then((res) => res.json()).then((data) => {
-                let recruiterData = data.filter((user) => user.isAssigned === false && user.userType === 1);
+                let recruiterData = data.filter((user) => user.isAssigned === false && user.role === "recruiter");
                 setRecruiters(recruiterData);
             })
         } catch (error) {

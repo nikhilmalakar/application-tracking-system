@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, set } from "react-hook-form"
 
 
 
@@ -40,19 +40,43 @@ export const CandidateProfile = () => {
     useEffect(() => {
         console.log(id);
         try {
-            fetch(`http://localhost:8080/application/all-application/`)
-            .then((res) => res.json())
-            .then((data) => {
-                const filterData = data.filter(item => item.candidateID === id); 
-                setApplicaton(filterData[11]);
-                // console.log(filterData[11]);
-            })
+            setApplicaton({"_id": "6676d1519d5f4ea7521cf13f",
+            "jobID": "6676cb664e5a14c58a721384",
+            "candidateID": "667656750d96db510a5facbf",
+            "userName": "Puneet",
+            "applicationStatus": "active",
+            "applicationForm": [
+              {
+                "question": "",
+                "answer": "",
+                "_id": "6675433b6fc8b5c030039b45"
+              }
+            ],
+            "candidateFeedback": [
+              {
+                "question": "Willing to relocate?",
+                "answer": "Yes",
+                "_id": "6675433b6fc8b5c030039b46"
+              },
+              {
+                "_id": "6676d5754e5a14c58a721744",
+                "question": "Expertise in python?",
+                "answer": "Yes"
+              }
+            ],
+            "__v": 0})
 
-            fetch(`http://localhost:8080/users/user/${id}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setCandidate(data)
-            })
+            setCandidate({
+                "_id": "667656750d96db510a5facbf",
+                "userName": "Puneet",
+                "userEmail": "puneet@gmail.com",
+                "userPassword": "$2a$10$6bLhTvaB/1dCC/EJyH/4S.kQelcEHFQA48vQ6lc.zTeYtzSKhQvOS",
+                "gender": "Male",
+                "address": "Uttar Pradesh",
+                "role": "candidate",
+                "applications": [],
+                "__v": 0
+              })
         } catch (error) {
             console.log(error);
         }
@@ -60,35 +84,57 @@ export const CandidateProfile = () => {
 
     useEffect(() => {
         console.log(id);
-        try {
-            fetch(`http://localhost:8080/recruiter/all-recruiter/`)
-            .then((res) => res.json())
-            .then((data) => {
-                const filterData = data.filter(item => item.recruiterID === currRecruiterID); 
-                setRecruiter(filterData[2]);
-                console.log(filterData[2]);
-            })
-        } catch (error) {
-            console.log(error);
-        }
+        setRecruiter({
+            "_id": "6676d2ca4e5a14c58a7216ed",
+            "jobID": "6676cb664e5a14c58a721384",
+            "recruiterID": "6676b5f64e5a14c58a720ebb",
+            "feedbackForm": [
+              "Willing to relocate?",
+              "Sufficient Experience?",
+              "Require sponsorship?",
+              "Good fit for the role?"
+            ],
+            "__v": 0
+          },
+          {
+            "_id": "6676d2ca4e5a14c58a7216f2",
+            "jobID": "6676cb664e5a14c58a721384",
+            "recruiterID": "6676b5f64e5a14c58a720ebb",
+            "feedbackForm": [
+              "Willing to relocate?",
+              "Sufficient Experience?",
+              "Require sponsorship?",
+              "Good fit for the role?"
+            ],
+            "__v": 0
+          })
     }, []);
 
     useEffect(() => {
-        function fetchJob(){
-
-            try {
-                fetch(`http://localhost:8080/jobs/all-jobs/`)
-                .then((res) => res.json())
-                .then((data) => {
-                    const filterData = data.filter(job => job._id === recruiter.jobID); 
-                    setJob(filterData[0]);
-                    console.log(filterData[0]);
-                })
-            } catch (error) {
-                console.log(error);
+        setJob({
+            "applicationForm": {
+                "question": [
+                  "Industry 2+ YOE",
+                  "Willing to relocate?",
+                  "Require visa sponsorship?"
+                ],
+                "answer": [
+                  "Yes",
+                  "Yes",
+                  "No"
+                ]
+              },
+              "_id": "6676cb664e5a14c58a721384",
+              "jobID": "2vek3boglxq4qr35",
+              "jobTitle": "DevOps Engineer",
+              "employmentType": "Full Time",
+              "location": "Mumbai",
+              "salary": "16.8",
+              "description": "A Dev-Ops engineer is an IT generalist who should have a wide-ranging knowledge of both development and operations, including coding, infrastructure management, system administration, and Dev-Ops tool chains.",
+              "applicants": [],
+              "__v": 0
             }
-        }
-        recruiter && fetchJob();
+        )
     }, [recruiter]);
     
     const onSubmit = (data) => {
@@ -120,6 +166,14 @@ export const CandidateProfile = () => {
                 console.log(result);
             });
     }
+
+    const apps = [
+        {
+            
+          },
+          
+    ]
+
 
     return (
         <div className='max-w-scren-2xl  w-full md:w-4/6 lg:w-6/8 container mt-2 mx-auto xl:px-24 px-4 '>
@@ -170,7 +224,7 @@ export const CandidateProfile = () => {
                                     <h2 className='mt-2 mb-2 font-bold'>Application Form (R1)</h2>
                                     {application && 
                                         <div className='px-1'>
-                                            {application.applicationForm && application.applicationForm.map((question, index) => (
+                                            {apps.applicationForm && application.applicationForm.map((question, index) => (
                                                 <div key={index}>
                                                     <p className='text-sm md:text-base text-justify'>Q{index + 1}: {question.question}</p>
                                                     <p className='text-sm md:text-base text-justify'>Response: <span className='font-semibold'>{question.answer}</span></p>

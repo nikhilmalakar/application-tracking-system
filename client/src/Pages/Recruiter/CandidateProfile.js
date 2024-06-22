@@ -92,18 +92,21 @@ export const CandidateProfile = () => {
     }, [recruiter]);
     
     const onSubmit = (data) => {
+        const newData = data;
+        if(application && candidate){
 
-        const newData = {
-            ...data, 
-            _id: application._id,
-            candidateID:candidate._id,
-            jobID : job._id,
-            applicationStatus: data.applicationStatus,
-            candidateFeedback: [...recruiter.feedbackForm.map((q, index) => ({
-                answer: data.candidateFeedback[index].answer,
-                question: q
-
-            }))]
+            newData = {
+                ...data, 
+                _id: application._id,
+                candidateID:candidate._id,
+                jobID : job._id,
+                applicationStatus: data.applicationStatus,
+                candidateFeedback: [...recruiter.feedbackForm.map((q, index) => ({
+                    answer: data.candidateFeedback[index].answer,
+                    question: q
+    
+                }))]
+            }
         }
         // console.log(newData);
 
@@ -161,7 +164,7 @@ export const CandidateProfile = () => {
                                 </div>
 
                             {
-                                application && 
+                                application && application.applicationForm &&
 
                                 <div className='px-1'>
                                     <h2 className='mt-2 mb-2 font-bold'>Application Form (R1)</h2>

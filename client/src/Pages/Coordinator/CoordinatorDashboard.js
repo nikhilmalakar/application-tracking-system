@@ -57,8 +57,8 @@ export const CoordinatorDashboard = () => {
                                         <thead>
                                             <tr>
                                                 <th className={tableHeaderCss}>Job Title</th>
-                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Salary</th>
-                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Date Posted</th>
+                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Type</th>
+                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Location</th>
                                                 <th className={tableHeaderCss}>Assign</th>
                                                 <th className={tableHeaderCss}></th>
                                             </tr>
@@ -99,10 +99,10 @@ function RenderTableRows({ job, recruiters }) {
                 {job.jobTitle}
             </th>
             <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.salary}
+                {job.employmentType}
             </td>
             <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.date}
+                {job.location}
             </td>
             <td className={`${tableDataCss} hidden md:table-cell`}>
                 <div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export const Register = () => {
 
@@ -16,7 +17,9 @@ export const Register = () => {
             userPassword: "",
             gender: "",
             address: "",
-            userType: ""
+            role: "",
+            isAssigned: false,
+            applications: []
         }
     })
 
@@ -25,15 +28,15 @@ export const Register = () => {
     useEffect(() => {
         if (redirect) {
             setTimeout(() => {
-                window.location.href = "/";
-            }, 2000);
+                window.location.href = "/login";
+            }, 4000);
         }
     }, [redirect]);
 
     const onSubmit = (data) => {
         console.log(data)
         // send data to backend API
-        fetch("http://localhost:8080/users/add-user", {
+        fetch("http://localhost:8080/auth/register", {
             method: "POST",
             headers: {'content-type' : 'application/json'},
             body: JSON.stringify(data)
@@ -41,7 +44,12 @@ export const Register = () => {
         .then((res) => res.json())
         .then((result) => {
             console.log(result);
+            toast.success("Sign up successful")
             setRedirect(true)
+        })
+        .catch((err) => {
+            toast.error("Unable to signup")
+            console.log(err);
         })
     }
 
@@ -86,11 +94,11 @@ export const Register = () => {
                             </div>
                             <div>
                                 <label className='block mt-2 m-1 text-sm'>User Type</label>
-                                <select {...register("userType", { required: true })} className='create-job-input'>
-                                    <option value="0">Candidate</option>
-                                    <option value="1">Recruiter</option>
-                                    <option value="2">Coordinator</option>
-                                    <option value="3">Employer</option>
+                                <select {...register("role", { required: true })} className='create-job-input'>
+                                    <option value="candidate">Candidate</option>
+                                    <option value="recruiter">Recruiter</option>
+                                    <option value="coordinator">Coordinator</option>
+                                    <option value="employer">Employer</option>
                                 </select>
                             </div>
                         </div>
@@ -98,7 +106,7 @@ export const Register = () => {
 
                     {/* Submit button */}
                     <div className='flex justify-center my-8'>
-                        <button className='block bg-primary text-white text-md py-3 px-16 rounded-md'>Register</button>
+                        <button className='block bg-secondary text-white text-md py-3 px-16 rounded-md'>Register</button>
                     </div>
                 </form>
                 <div className='text-center'>

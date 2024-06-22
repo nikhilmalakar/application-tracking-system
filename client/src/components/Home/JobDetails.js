@@ -12,7 +12,7 @@ export const JobDetails = () => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            candidateID: "667336c6ab92f179a717d0ec",
+            candidateID: "",
             jobID: "",
             applicationStatus: "active",
             resume: null,
@@ -33,6 +33,15 @@ export const JobDetails = () => {
     const [applicants, setApplicants] = useState();
     const [file, setFile] = useState();
 
+    const [loginData, setLoginData] = useState();
+    
+    useEffect(() => {
+        let token = localStorage.getItem("user");
+        const user = JSON.parse(token);
+        setLoginData(user)
+        console.log(user);
+    }, [])
+
     useEffect(() => {
         fetch(`http://localhost:8080/jobs/current-job/${id}`).then(res => res.json()).then(
             data => { setJob(data); console.log(data); }
@@ -50,10 +59,7 @@ export const JobDetails = () => {
                     }
                     const data = await response.json();
 
-                    // Filter the applicants data based on the applicant ids in jobs
-                    // const filteredApplicants = data.filter(app => jobs.applicants.applicant.includes(app._id));
                     const filteredApplicants = data.filter(app => {
-                        // Check if any element in jobs.applicants array has _id equal to app._id
                         return job.applicants.some(jobApplicant => jobApplicant.applicant === app._id);
                     });
 
@@ -69,10 +75,32 @@ export const JobDetails = () => {
         }
     }, [job]);
 
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        setFile(file.name);
+        const formData = new FormData();
+        formData.append("resume", file);
+        fetch(`http://localhost:8080/upload/resume/${applicants._id}`, {
+            method: "POST",
+            body: formData,
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
+            });
+    }
+
     const onSubmit = (data) => {
-        console.log(data.resume[0]);
-        setFile(data.resume[0]);
         console.log(data);
+        // fetch(`http://localhost:8080/upload/resume/${applicants._id}`, {
+        //     method: "POST",
+        //     headers: { "content-type": "application/json" },
+        //     body: JSON.stringify(data),
+        // })
+        //     .then((res) => res.json())
+        //     .then((result) => {
+        //         console.log(result);
+        //     });
     }
 
     return (
@@ -131,7 +159,7 @@ export const JobDetails = () => {
 
                         <div className='w-full md:w-5/6'>
                             <label class="sr-only">Choose file</label>
-                            <input type="file" {...register("resume")} id="file-input" class="block w-full cursor-pointer border border-primary shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-primary file:text-white file:border-0 file:me-4 file:py-2 file:px-3" />
+                            <input type="file" onChange={handleFileUpload} {...register("resume")} id="file-input" class="block w-full cursor-pointer border border-primary shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-primary file:text-white file:border-0 file:me-4 file:py-2 file:px-3" />
                         </div>
 
                         {

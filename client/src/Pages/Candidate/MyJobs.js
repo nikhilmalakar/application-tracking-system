@@ -1,28 +1,45 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-// import '../../public/featuredJobs.json'
-import { toast } from 'react-toastify'
 
-export const AllJobs = () => {
+export const MyJobs = () => {
 
     const tableHeaderCss = "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
     
-    const [jobs, setJobs] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect( ()=>{
-        try {
-            fetch("http://localhost:8080/jobs/all-jobs")
-                .then(res => res.json())
-                .then(data => {
-                    const newData = data.slice(0, 6);
-                    setJobs(newData);
-                });
-        } catch (error) {
-            console.error("Error fetching jobs:", error);
+    const applications = [
+        {
+            jobTitle: "Web Developer",
+            employmentType: "Full Time",
+            location: "Hyderabad"
+        },
+        {
+            jobTitle: "Data Analyst",
+            employmentType: "Part Time",
+            location: "Mumbai"
+        },
+        {
+            jobTitle: "Full Stack Developer",
+            employmentType: "Full Time",
+            location: "Delhi"
         }
+    ]
+    const [loginData, setLoginData] = useState();
+    
+    useEffect(() => {
+        let token = localStorage.getItem("user");
+        const user = JSON.parse(token);
+        setLoginData(user[0])
+        console.log(user);
+    }, [])
 
-    }, [jobs] )
+    useEffect(() => {
+
+        try {
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
     return (
         <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
 
@@ -36,7 +53,7 @@ export const AllJobs = () => {
                                 <div className="rounded-t mb-0 px-4 py-3 border-0 bg-secondary text-white ">
                                     <div className="flex flex-wrap items-center">
                                         <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-center">
-                                            <h3 className="font-bold text-base text-blueGray-700">All Posted Jobs</h3>
+                                            <h3 className="font-bold text-base text-blueGray-700">My Applications</h3>
                                         </div>
 
                                     </div>
@@ -46,15 +63,19 @@ export const AllJobs = () => {
                                     <table className="items-center bg-transparent w-full border-collapse ">
                                         <thead>
                                             <tr>
-                                                <th className={tableHeaderCss}>Job Title</th>
-                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Salary</th>
+                                                <th className={tableHeaderCss}>Job Role</th>
+                                                <th className={`${tableHeaderCss} hidden md:table-cell`}>Type</th>
                                                 <th className={`${tableHeaderCss} hidden md:table-cell`}>Location</th>
-                                                <th className={tableHeaderCss}></th>
+                                                <th className={tableHeaderCss}>Status</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            {jobs.map((job, key) => <RenderTableRows key={key} job={job} />)}
+                                            {   applications ?
+                                                applications.map((application, key) => <RenderTableRows key={key} application={application} />)
+                                                :
+                                                <p>No shortlisted candidates found</p>
+                                            }
                                         </tbody>
 
                                     </table>
@@ -68,47 +89,26 @@ export const AllJobs = () => {
         </div>
     )
 }
-function HandlerDeleteJob(id){
-    try {
-        fetch(`http://localhost:8080/jobs/delete-job/${id}`, {
-            method: 'DELETE'
-        })
-        .then(res => res.json())
-        .then(data => {
-            // Handle the response data here
-            toast.success("Deleted successfully")
-        });
-    } catch (error) {
-        console.error("Error deleting job:", error);
-        toast.error("Unable to delete")
-    }
-}
 
-
-function RenderTableRows({job}){
+function RenderTableRows({application}){
+    
     const tableDataCss = "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
     return (
 
         <tr>
             <th className= {`${tableDataCss} text-left text-blueGray-700 px-3 md:px-6`}>
-                {job.jobTitle}
+                {application.jobTitle}
             </th>
             <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.location}
+                {application.employmentType}
             </td>
             <td className={`${tableDataCss} hidden md:table-cell`}>
-                {job.salary}
+                {application.location}
             </td>
-            <td className={`flex justify-between ${tableDataCss}`}>
-                <button>
-
-                    <box-icon name='edit'/>
-                </button>
-                <button>
-                    
-                    <box-icon name='trash' onClick={() => HandlerDeleteJob(job._id)} />
-                </button>
+            <td className={`${tableDataCss} font-bold hidden md:table-cell`}>
+                Active
             </td>
+            
         </tr>
     )
 }

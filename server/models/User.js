@@ -22,9 +22,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    userType: {
-        type: Number,
-        required: true
+    role: {
+        type: String,
+        required: true,
+        enum: ["employer", "coordinator", "recruiter", "candidate"],
+        default: "candidate"
     },
     isAssigned: {
         type: Boolean

@@ -1,32 +1,60 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
+import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 
-export const PostJob = () => {
+export const UpdateJob = () => {
 
+    const {id} = useParams();
+    const [job, setJob] = useState()
+
+    const initialValue = []
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/jobs/current-job/${id}`)
+            .then((res) => res.json())
+            .then((result) => {
+                setJob(result);
+                initialValue = [{
+                    jobTitle: result.jobTitle,
+                    employmentType: result.employmentType,
+                    location: result.location,
+                    salary: result.salary,
+                    description: result.description,
+                    applicationForm: result.applicationForm,
+                }]
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },[]);
+    
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm({
         defaultValues:{
-            jobTitle: "",
-            employmentType: "",
-            location: "",
-            salary: "",
-            description: "",
-            applicationForm: {
-                question: [""],
-                answer: [""]
-            }
-            
+           initialValue
         }
     })
 
+    useEffect(()=> {
+        fetch(`http://localhost:8080/jobs/current-job/${id}`)
+            .then((res) => res.json())
+            .then((result) => {
+                setJob(result);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [])
+
     const onSubmit = (data) =>{ 
         console.log(data)
+        
         // send data to backend API
         fetch("http://localhost:8080/jobs/post-job", {
             method: "POST",
@@ -36,12 +64,12 @@ export const PostJob = () => {
         .then((res) => res.json())
         .then((result) => {
             console.log(result);
-            toast.success("Job Posted Successfully")
+            toast.success("Job Updated Successfully")
             window.location.href = '/all-jobs';
         })
         .catch((error) => {
             console.log(error);
-            toast.error("Failed to post job");
+            toast.error("Failed to update job");
         });
 
     }
@@ -132,7 +160,7 @@ export const PostJob = () => {
 
                     {/* Submit button */}
                     <div className='flex justify-center my-8'>
-                        <button className='block bg-secondary text-white text-md py-4 px-16 rounded-md'>Create Job Post</button>
+                        <button className='block bg-primary text-white text-md py-4 px-16 rounded-md'>Create Job Post</button>
                     </div>
                 </form>
 

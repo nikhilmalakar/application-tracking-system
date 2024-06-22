@@ -30,7 +30,7 @@ export const OurCompanies = () => {
   ]
 
   return (
-    <div className>
+    <div className="mt-56">
       <h1 className='text-center text-xl md:text-2xl font-bold text-primary mt-12 md:mt-6 my-6 md:my-12'>Our Trusted Partners</h1>
             
 

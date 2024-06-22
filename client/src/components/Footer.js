@@ -13,7 +13,7 @@ export const Footer = () => {
                         <img src={logoURL} className="rounded-full h-16" alt="Flowbite Logo" />
                         <span class="self-center text-2xl font-semibold whitespace-nowrap ">HumGrow™</span>
                     </a>
-                    <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0">
+                    <ul class="flex flex-wrap justify-center items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0">
                         
                         {
                             footerNav.map( (menu, key)=> {

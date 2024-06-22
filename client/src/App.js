@@ -1,6 +1,7 @@
 
 import { Routes, Route, Outlet } from 'react-router-dom';
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { Home } from './Pages/Employer/Home';
 import { Navbar } from './components/Navbar';
 import { PostJob } from './Pages/Employer/PostJob';
@@ -16,18 +17,30 @@ import { ShortlistedDetails } from './components/ShortlistedDetails';
 import { ApplicationForm } from './Pages/Candidate/ApplicationForm';
 import { AssignRecruiter } from './Pages/Coordinator/AssignRecruiter';
 import { Footer } from './components/Footer';
+import {AllPostedJobs} from './components/AllPostedJobs'
+import { Dashboard } from './Pages/Dashboard';
+import { useContext, useEffect } from 'react';
+import { LoginContext } from './components/ContextProvider/Context';
+import { UpdateJob } from './Pages/Employer/UpdateJob';
+import { MyJobs } from './Pages/Candidate/MyJobs';
 
 function App() {
+
+  const {loginData, setLoginData} = useContext(LoginContext)
+
+  
+
   return (
     <div className="App">
       <Routes>
           {/* <h1 className='text-5xl text-green-600 '>Hello</h1> */}
           <Route path='/' element={<Navbar />}> 
             <Route path='/' element={<Home />}/>
+            <Route path='*' element={<Home />}/>
             <Route path='/post-job' element={<PostJob />}/>
             <Route path='/all-jobs' element={<AllJobs />}/>
             <Route path='/login' element={<Login />}/>
-            <Route path='/register' element={<Register />}/>
+            <Route path='/signup' element={<Register />}/>
 
 
             {/* <Route path='/job-detail' element={<JobDetails />}/> */}
@@ -41,10 +54,15 @@ function App() {
             <Route path='/recruiter/review' element={<RecruiterDashboard />}/>
             {/* <Route path='/recruiter/review' element={<RecruiterDashboard />}/> */}
             <Route path='/coordinator/review' element={<CoordinatorDashboard />}/>
+            <Route path='/dash' element={<Dashboard />}/>
+            <Route path='/all-posted-jobs' element={<AllPostedJobs />}/>
+            <Route path='/update-job/:id' element={<UpdateJob />}/>
+            <Route path='/my-jobs/' element={<MyJobs />}/>
               
           </Route>
           
       </Routes>
+
       <Footer />
     </div>
   );

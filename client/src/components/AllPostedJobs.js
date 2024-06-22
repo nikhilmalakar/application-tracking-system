@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logoURL from '../assets/img/logo.jpeg'
 
-export const SimilarJobs = () => {
+export const AllPostedJobs = () => {
 
     const [jobs, setJobs] = useState([]);
 
@@ -18,7 +18,7 @@ export const SimilarJobs = () => {
 
     return (
         <div className=''>
-            <h1 className='text-center text-xl md:text-2xl font-bold text-primary mt-8 md:mt-6'>Similar Jobs</h1>
+            <h1 className='text-center text-xl md:text-2xl font-bold text-primary mt-8 md:mt-6'>Join Our Team</h1>
             <div className='w-full grid sm:grid-cols-2 md:grid-cols-3  gap-4'>
                 {jobs.map((job, key) => <Card key={key} job={job} />)}
             </div>

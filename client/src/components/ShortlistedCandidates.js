@@ -86,7 +86,11 @@ export const ShortlistedCandidates = () => {
                                         </thead>
 
                                         <tbody>
-                                            {shortlistCandidate && jobs && shortlistCandidate.map((candidate, key) => <RenderTableRows job={jobs} key={key} candidate={candidate} />)}
+                                            {shortlistCandidate && jobs && shortlistApplication?
+                                             shortlistCandidate.map((candidate, key) => <RenderTableRows job={jobs} key={key} candidate={candidate} />)
+                                                :
+                                                <p>No shortlisted candidates found</p>
+                                            }
                                         </tbody>
 
                                     </table>
@@ -101,19 +105,13 @@ export const ShortlistedCandidates = () => {
     )
 }
 
-function HandlerDeleteJob(id){
-    console.log("delete job");
-}
-function HandlerUpdateJob(id){
-    console.log("delete job");
-}
-
 function RenderTableRows({candidate, job}){
     console.log("called");
     console.log(job);
     const tableDataCss = "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
     return (
-
+        
+        candidate && 
         <tr>
             <th className= {`${tableDataCss} text-left text-blueGray-700 px-3 md:px-6`}>
                 {candidate.userName}
